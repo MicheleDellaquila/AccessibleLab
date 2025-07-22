@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="./assets/images/favicon-32x32.png">
+  <title>Frontend Mentor | Browser extensions manager UI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      /* Light Theme Colors */
+      --neutral-900: hsl(227, 75%, 14%);
+      --neutral-800: hsl(226, 25%, 17%);
+      --neutral-700: hsl(225, 23%, 24%);
+      --neutral-600: hsl(226, 11%, 37%);
+      --neutral-300: hsl(0, 0%, 78%);
+      --neutral-200: hsl(217, 61%, 90%);
+      --neutral-100: hsl(0, 0%, 93%);
+      --neutral-0: hsl(200, 60%, 99%);
+
+      --red-400: hsl(3, 86%, 64%);
+      --red-500: hsl(3, 71%, 56%);
+      --red-700: hsl(3, 77%, 44%);
+
+      --bg-gradient: linear-gradient(180deg, #EBF2FC 0%, #EEF8F9 100%);
+      --bg-primary: var(--neutral-0);
+      --bg-secondary: #ffffff;
+      --text-primary: var(--neutral-900);
+      --text-secondary: var(--neutral-600);
+      --border-color: var(--neutral-200);
+      --shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    }
+
+    [data-theme="dark"] {
+      --bg-gradient: linear-gradient(180deg, #040918 0%, #091540 100%);
+      --bg-primary: var(--neutral-900);
+      --bg-secondary: var(--neutral-800);
+      --text-primary: var(--neutral-0);
+      --text-secondary: var(--neutral-300);
+      --border-color: var(--neutral-700);
+      --shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Noto Sans', sans-serif;
+      background: var(--bg-gradient);
+      color: var(--text-primary);
+      min-height: 100vh;
+      transition: all 0.3s ease;
+      margin: 0;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      padding-block: 0.2rem;
+      padding-inline: 0.75rem;
+      margin-bottom: 3rem;
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      transition: all 0.3s ease;
+    }
+
+    .header-content {
+      display: contents;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
+
+    .logo-section {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .logo {
+      width: 140px;
+      height: 56px;
+      transition: filter 0.3s ease;
+    }
+
+    .title {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .theme-toggle {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 50px;
+      padding: 0.5rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      box-shadow: var(--shadow);
+      transition: all 0.3s ease;
+    }
+
+    .theme-toggle:hover {
+      transform: translateY(-2px);
+    }
+
+    .theme-icon {
+      width: 20px;
+      height: 20px;
+      opacity: 0.6;
+      transition: opacity 0.3s ease;
+    }
+
+    .theme-icon.active {
+      opacity: 1;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+
+    .section-title {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .filter-buttons {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .filter-btn {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 24px;
+      padding: 0.75rem 1.5rem;
+      cursor: pointer;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      transition: all 0.3s ease;
+    }
+
+    .filter-btn.active {
+      background: var(--red-500);
+      color: white;
+      border-color: var(--red-500);
+    }
+
+    .filter-btn:hover:not(.active) {
+      background: var(--neutral-100);
+      color: var(--text-primary);
+    }
+
+    [data-theme="dark"] .filter-btn:hover:not(.active) {
+      background: var(--neutral-700);
+      color: var(--text-primary);
+    }
+
+    .extensions-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      grid-template-rows: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+    }
+
+    .extension-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 1rem;
+      box-shadow: var(--shadow);
+      transition: all 0.3s ease;
+      position: relative;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .extension-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    [data-theme="dark"] .extension-card:hover {
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    .extension-card.inactive {
+      opacity: 0.7;
+    }
+
+    .extension-header {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2.75rem;
+      flex-grow: 1;
+    }
+
+    .extension-logo {
+      width: 56px;
+      height: 56px;
+      border-radius: 8px;
+    }
+
+    .extension-info h3 {
+      font-size: 1.125rem;
+      font-weight: 500;
+      margin-bottom: 0.25rem;
+      color: var(--text-primary);
+    }
+
+    .extension-info p {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    .extension-actions {
+      margin-top: auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .remove-btn {
+      background: transparent;
+      color: var(--text-secondary);
+      border: 1px solid var(--neutral-100);
+      border-radius: 16px;
+      padding: 0.5rem 1rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .remove-btn:hover {
+      background: var(--red-500);
+      color: var(--neutral-100);
+      border-color: var(--red-500);
+      transform: translateY(-1px);
+    }
+
+    .remove-btn:active {
+      background: var(--red-700);
+      color: var(--neutral-900);
+      border-color: var(--red-700);
+      transform: translateY(0);
+    }
+
+    .remove-btn:focus {
+      outline: 2px solid var(--red-500);
+      outline-offset: 2px;
+    }
+
+    .toggle-switch {
+      width: 48px;
+      height: 24px;
+      background: var(--neutral-300);
+      border-radius: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      padding: 2px;
+      position: relative;
+    }
+
+    .toggle-switch:focus {
+      outline: 2px solid white;
+      outline-offset: 2px;
+    }
+
+    .toggle-switch.active {
+      background: var(--red-500);
+    }
+
+    .toggle-switch::after {
+      content: '';
+      width: 20px;
+      height: 20px;
+      background: white;
+      border-radius: 50%;
+      transition: transform 0.3s ease;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .toggle-switch.active::after {
+      transform: translateX(24px);
+    }
+
+    .stats {
+      display: none;
+    }
+
+    .attribution {
+      font-size: 11px;
+      text-align: center;
+      color: var(--text-secondary);
+      margin-top: 2rem;
+    }
+
+    .attribution a {
+      color: var(--red-500);
+      text-decoration: none;
+    }
+
+    .attribution a:hover {
+      text-decoration: underline;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: 0;
+      border: 0;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 1rem;
+      }
+
+      .header {
+        flex-direction: column;
+        gap: 1rem;
+        margin-bottom: 2rem;
+      }
+
+      .title {
+        font-size: 1.5rem;
+      }
+
+      .section-header {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+      }
+
+      .filter-buttons {
+        align-self: stretch;
+        justify-content: center;
+      }
+
+      .extensions-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+    }
+
+    @media (max-width: 320px) {
+      .extension-card {
+        padding: 1rem;
+      }
+
+      .extension-header {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .extension-actions {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: stretch;
+      }
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.7);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal[aria-hidden="false"] {
+      display: flex;
+    }
+
+    .modal-backdrop {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      top: 0;
+      left: 0;
+      z-index: -1;
+    }
+
+    .modal-content {
+      background: var(--bg-secondary);
+      border-radius: 8px;
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+      max-width: 500px;
+      width: 90%;
+      padding: 2rem;
+      position: relative;
+      z-index: 1001;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .modal-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .modal-close {
+      background: transparent;
+      border: none;
+      color: var(--text-secondary);
+      font-size: 1.5rem;
+      cursor: pointer;
+      transition: color 0.3s ease;
+    }
+
+    .modal-close:hover {
+      color: var(--red-500);
+    }
+
+    .modal-body {
+      margin-bottom: 1.5rem;
+    }
+
+    .modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 1rem;
+    }
+
+    .modal-btn {
+      padding: 0.75rem 1.5rem;
+      border-radius: 24px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .modal-btn-secondary {
+      background: var(--neutral-200);
+      color: var(--text-primary);
+      border: 1px solid var(--neutral-300);
+    }
+
+    .modal-btn-danger {
+      background: var(--red-500);
+      color: white;
+      border: 1px solid var(--red-500);
+    }
+
+    .modal-btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .modal-btn:active {
+      transform: translateY(0);
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- 
+    TODO:
+    - Inserire su git hub questo cartella e generare un readme
+    - Comprendere meglio il funzionamento di aria-labelledby(sempre che quando impostata, prenda e comunichi tutto il testo dei nested elementi)
+      - Inoltre, se abbiamo aria-labelledby non serve aria-live in quanto se cambio il testo, viene comunicato automaticamente
+  -->
+
+  <main>
+    <div class="container">
+      <header role="banner" class="header">
+        <div class="logo-section">
+          <img src="./assets/images/logo.svg" alt="Extensions name with a icon" class="logo">
+        </div>
+        <button aria-label="Switch to dark theme" id="theme-toggle" class="theme-toggle" onclick="toggleTheme()">
+          <img src="./assets/images/icon-sun.svg" alt="" class="theme-icon" id="sun-icon">
+          <img src="./assets/images/icon-moon.svg" alt="" class="theme-icon" id="moon-icon">
+        </button>
+      </header>
+
+      <section aria-labelledby="extensions-list">
+        <header class="section-header" aria-label="Extensions list header">
+          <h1 id="extensions-list" class="section-title">Extensions List</h1>
+          <div role="group" aria-label="Filter extensions" class="filter-buttons">
+            <button aria-label="Filter all extensions" aria-pressed="true" class="filter-btn active"
+              onclick="filterExtensions('all')">All</button>
+            <button aria-label="Filter active extensions" aria-pressed="false" class="filter-btn"
+              onclick="filterExtensions('active')">Active</button>
+            <button aria-label="Filter inactive extensions" aria-pressed="false" class="filter-btn"
+              onclick="filterExtensions('inactive')">Inactive</button>
+          </div>
+        </header>
+        <ul class="extensions-grid" id="extensions-container" aria-label="List of extensions">
+          <!-- Extensions will be loaded here -->
+        </ul>
+      </section>
+
+
+      <footer role="contentinfo" class="attribution">
+        Challenge by <a href="https://www.frontendmentor.io?ref=challenge">Frontend Mentor</a>.
+        Coded by <a href="https://www.frontendmentor.io/profile/MicheleDellaquila">Michele Dellaquila</a>.
+      </footer>
+    </div>
+
+    <div class="announcer" role="status" aria-live="polite" class="sr-only"></div>
+
+    <!-- Non capisco perchè senza aria-describedby e aria-labelledby il contenuto viene comunicato 2 volte. -->
+    <div id="remove-modal" class="modal" role="dialog" aria-modal="true" aria-hidden="true">
+      <div class="modal-backdrop" aria-hidden="true"></div>
+      <div class="modal-content" tabindex="0">
+        <header class="modal-header">
+          <h2 id="modal-title">Confirm Removal</h2>
+          <button class="modal-close" aria-label="Close dialog" onclick="closeRemoveModal()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </header>
+        <div class="modal-body">
+          <p id="modal-description">Are you sure you want to remove <strong id="extension-name-modal"></strong>? This action cannot be undone.</p>
+        </div>
+        <footer class="modal-footer">
+          <button class="modal-btn modal-btn-secondary" onclick="closeRemoveModal()">Cancel</button>
+          <button class="modal-btn modal-btn-danger" id="confirm-remove" onclick="confirmRemoveExtension()">Remove Extension</button>
+        </footer>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    function toggleTheme() {
+      const html = document.documentElement;
+      const currentTheme = html.getAttribute('data-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+
+      html.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+      updateThemeIcons(newTheme);
+    }
+
+    function updateThemeIcons(theme) {
+      const sunIcon = document.getElementById('sun-icon');
+      const moonIcon = document.getElementById('moon-icon');
+      const toggleBtn = document.getElementById('theme-toggle');
+
+      if (theme === 'dark') {
+        sunIcon.classList.remove('active');
+        moonIcon.classList.add('active');
+        toggleBtn.setAttribute('aria-label', 'Switch to light theme');
+      } else {
+        sunIcon.classList.add('active');
+        moonIcon.classList.remove('active');
+        toggleBtn.setAttribute('aria-label', 'Switch to dark theme');
+      }
+    }
+
+    function initTheme() {
+      const savedTheme = localStorage.getItem('theme') || 'light';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+      updateThemeIcons(savedTheme);
+    }
+
+
+    let currentFilter = 'all';
+    function filterExtensions(filter) {
+      currentFilter = filter;
+
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.classList.remove('active');
+        btn.setAttribute('aria-pressed', 'false');
+      });
+      event.target.classList.add('active');
+      event.target.setAttribute('aria-pressed', 'true');
+
+      renderExtensions();
+    }
+
+    function toggleExtension(index) {
+      extensionsData[index].isActive = !extensionsData[index].isActive;
+      renderExtensions();
+    }
+
+    let extensionsData = [];
+    async function loadExtensions() {
+      try {
+        const response = await fetch('./data.json');
+        extensionsData = await response.json();
+        renderExtensions();
+      } catch (error) {
+        console.error('Error loading extensions:', error);
+      }
+    }
+
+    function renderExtensions() {
+      const container = document.getElementById('extensions-container');
+      container.innerHTML = '';
+
+      let filteredExtensions = extensionsData;
+      if (currentFilter === 'active') {
+        filteredExtensions = extensionsData.filter(ext => ext.isActive);
+      } else if (currentFilter === 'inactive') {
+        filteredExtensions = extensionsData.filter(ext => !ext.isActive);
+      }
+
+      filteredExtensions.forEach((extension, filteredIndex) => {
+        const originalIndex = extensionsData.findIndex(ext => ext === extension);
+
+        const card = document.createElement('li');
+        card.setAttribute("aria-label", `Extension: ${extension.name} ${currentFilter === "all" && extension.isActive ? "active" : "inactive"}`);
+        card.setAttribute("aria-posinset", filteredIndex + 1);
+        card.setAttribute("aria-setsize", filteredExtensions.length);
+        card.className = `extension-card ${extension.isActive ? 'active' : 'inactive'}`;
+
+        card.innerHTML = `
+          <div class="extension-header">
+            <img src="${extension.logo}" alt="${extension.name} logo" class="extension-logo">
+            <div class="extension-info">
+              <h3>${extension.name}</h3>
+              <p>${extension.description}</p>
+            </div>
+          </div>
+          <div class="extension-actions">
+            <button class="remove-btn" onclick="openRemoveModal(${originalIndex})">Remove</button>
+            <div role="switch" class="toggle-switch ${extension.isActive ? 'active' : ''}" onclick="toggleExtension(${originalIndex})" aria-label="Toggle ${extension.name} extension" aria-checked="${extension.isActive}" tabindex="0">
+              <span class="toggle-switch-inner"></span>
+            </div>
+          </div>
+        `;
+
+        container.appendChild(card);
+      });
+    }
+
+    let previousFocusElement = null;
+    function openRemoveModal(index) {
+      previousFocusElement = document.activeElement;
+      console.log("Previous Focus Element:", previousFocusElement);
+      const modal = document.getElementById('remove-modal');
+      const modalContent = document.querySelector('.modal-content');
+      const containerDiv = document.querySelector(".container")
+      const extensionName = extensionsData[index].name;
+
+      document.getElementById('extension-name-modal').innerText = extensionName;
+      modal.style.display = 'flex';
+      modalContent.focus();
+      containerDiv.setAttribute("inert", "true");
+
+      const confirmRemoveBtn = document.getElementById('confirm-remove');
+      confirmRemoveBtn.setAttribute('data-index', index);
+    }
+
+    function closeRemoveModal() {
+      const modal = document.getElementById('remove-modal');
+      const containerDiv = document.querySelector(".container");
+
+      modal.setAttribute('aria-hidden', 'true');
+      modal.style.display = 'none';
+      containerDiv.removeAttribute("inert");
+
+      if (previousFocusElement && previousFocusElement.isConnected) {
+        previousFocusElement.focus();
+      }
+
+      previousFocusElement = null;
+    }
+
+    function confirmRemoveExtension() {
+      const confirmRemoveBtn = document.getElementById('confirm-remove');
+      const index = confirmRemoveBtn.getAttribute('data-index');
+
+      if (index !== null) {
+        if (confirm(`Are you sure you want to remove ${extensionsData[index].name}?`)) {
+          extensionsData.splice(index, 1);
+          renderExtensions();
+        }
+      }
+
+      closeRemoveModal();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initTheme();
+      loadExtensions();
+    });
+  </script>
+</body>
+
+</html>

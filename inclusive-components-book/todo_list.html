@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        ul {
+            padding: 0;
+        }
+
+        .todo-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border: 1px solid #ddd;
+            margin-bottom: 5px;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+
+        .todo-checkbox {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            background-color: transparent;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .todo-checkbox:hover {
+            border-color: #4CAF50;
+        }
+
+        .todo-checkbox:focus {
+            outline: 2px solid #4CAF50;
+            outline-offset: 2px;
+        }
+
+        .todo-label {
+            display: flex;
+            align-items: center;
+            flex: 1;
+            cursor: pointer;
+        }
+
+        .todo-text {
+            flex: 1;
+            transition: all 0.3s ease;
+        }
+
+        .todo-text.completed {
+            text-decoration: line-through;
+            color: #888;
+        }
+
+        .delete-btn {
+            background: none;
+            border: none;
+            color: #ff4444;
+            cursor: pointer;
+            font-size: 18px;
+            padding: 5px;
+            border-radius: 3px;
+            transition: background-color 0.3s ease;
+        }
+
+        .delete-btn:hover {
+            background-color: #ffebee;
+        }
+
+        #todo-form {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        #todo-input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        #todo-input[aria-invalid="true"] {
+            border-color: red;
+        }
+
+        button[type="submit"] {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        button[type="submit"]:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            border: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+        <h1 id="todo-title">Todo List</h1>
+
+        <ul id="todo-list" aria-labelledby="todo-title">
+            <!-- Todo items will be added here -->
+        </ul>
+
+        <form id="todo-form" novalidate>
+            <!-- Errore #1: Non hai inserito il campo label 
+            <label for="todo-input" class="sr-only">Add a todo item</label>
+            -->
+            <input type="text" id="todo-input" placeholder="Add a new task" required>
+            <button type="submit">Add</button>
+        </form>
+
+        <div id="todo-status" aria-live="polite" aria-relevant="all" class="sr-only"></div>
+        <div id="form-status" role="status" aria-live="polite" class="sr-only"></div>
+    </main>
+
+    <script>
+        /* TODO: 
+            - Rivedere parametro set size se deve essere impostato a -1 o meno. 
+            - Aggiungere aria-relevant nei tuoi appunti
+        */
+
+        const form = document.getElementById('todo-form');
+        const input = document.getElementById('todo-input');
+        const button = form.querySelector('button[type="submit"]');
+        const todoList = document.getElementById('todo-list');
+        const todos = [];
+
+        const todoStatusUpdate = (action, todoText, totalTodos) => {
+            const statusDiv = document.getElementById('todo-status');
+            let message = '';
+
+            switch (action) {
+                case 'added':
+                    message = `Task ${todoText} aggiunta. Totale task: ${totalTodos}`;
+                    break;
+                case 'completed':
+                    message = `Task ${todoText} completata`;
+                    break;
+                case 'uncompleted':
+                    message = `Task ${todoText} non completata`;
+                    break;
+                case 'deleted':
+                    message = `Task ${todoText} eliminata. Totale task: ${totalTodos}`;
+                    break;
+                default:
+                    message = '';
+            }
+            statusDiv.textContent = message;
+
+            setTimeout(() => statusDiv.textContent = '', 3000);
+        }
+
+        const formStatusUpdate = (message) => {
+            const formStatusDiv = document.getElementById('form-status');
+            formStatusDiv.textContent = message;
+
+            setTimeout(() => formStatusDiv.textContent = '', 3000);
+        }
+
+        input.addEventListener("change", () => {
+            const buttonIsDisabled = button.hasAttribute("disabled");
+            if (input.value.trim() && buttonIsDisabled) {
+                button.removeAttribute("disabled");
+                input.removeAttribute("aria-invalid");
+            }
+        })
+
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
+            const todoText = input.value.trim();
+
+            if (!todoText) {
+                button.setAttribute("disabled", "true");
+                input.setAttribute("aria-invalid", "true");
+                formStatusUpdate('Per favore, inserisci un task valido.');
+                return;
+            }
+
+            button.removeAttribute("disabled");
+            input.removeAttribute("aria-invalid");
+            addTodoItem(todoText);
+            input.value = '';
+
+        });
+
+        function addTodoItem(text) {
+            const todoItem = {
+                text: text,
+                id: Date.now() + Math.random()
+            };
+            todos.push(todoItem);
+
+            // LI Element
+            const li = document.createElement('li');
+            li.className = 'todo-item';
+            li.setAttribute("aria-posinset", todos.length.toString());
+            li.setAttribute("aria-setsize", "-1");
+            li.dataset.todoId = todoItem.id;
+
+            // Label Element per wrappare checkbox e span
+            const label = document.createElement('label');
+            label.className = 'todo-label';
+
+            // Button Element stile checkbox
+            const checkboxBtn = document.createElement('button');
+            checkboxBtn.type = 'button';
+            checkboxBtn.className = 'todo-checkbox';
+            checkboxBtn.setAttribute('role', 'checkbox');
+            checkboxBtn.setAttribute('aria-checked', 'false');
+            checkboxBtn.innerHTML = `
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="20,6 9,17 4,12" style="display: none;"></polyline>
+                </svg>
+            `;
+
+            let isChecked = false;
+            checkboxBtn.setAttribute('aria-label', `Spunta come completato il task ${text}`);
+            checkboxBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                isChecked = !isChecked;
+                checkboxBtn.setAttribute('aria-checked', isChecked.toString());
+
+                const checkmark = checkboxBtn.querySelector('polyline');
+                if (isChecked) {
+                    checkmark.style.display = 'block';
+                    checkboxBtn.style.backgroundColor = '#4CAF50';
+                    checkboxBtn.style.borderColor = '#4CAF50';
+                } else {
+                    checkmark.style.display = 'none';
+                    checkboxBtn.style.backgroundColor = 'transparent';
+                    checkboxBtn.style.borderColor = '#ddd';
+                }
+
+                checkboxBtn.setAttribute('aria-label', `${isChecked ? 'Spunta come non completato' : 'Spunta come completato'} il task ${text}`);
+                todoTextSpan.classList.toggle('completed', isChecked);
+                todoStatusUpdate(isChecked ? 'completed' : 'uncompleted', text, todos.length);
+            });
+
+            // Span Element
+            const todoTextSpan = document.createElement('span');
+            todoTextSpan.className = 'todo-text';
+            todoTextSpan.textContent = text;
+
+            // Button Element per eliminare
+            const deleteBtn = document.createElement('button');
+            deleteBtn.type = 'button';
+            deleteBtn.setAttribute('aria-label', `Elimina task ${text}`);
+            deleteBtn.className = 'delete-btn';
+            deleteBtn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" />
+                </svg>`;
+            deleteBtn.title = 'Elimina task';
+            deleteBtn.addEventListener('click', () => {
+                const index = todos.findIndex(todo => todo.id === todoItem.id);
+                if (index > -1) todos.splice(index, 1);
+                li.remove();
+
+                updateAriaPositions();
+                todoStatusUpdate('deleted', text, todos.length);
+            });
+
+            label.appendChild(checkboxBtn);
+            label.appendChild(todoTextSpan);
+            li.appendChild(label);
+            li.appendChild(deleteBtn);
+            todoList.appendChild(li);
+
+            todoStatusUpdate('added', text, todos.length);
+        }
+
+        function updateAriaPositions() {
+            const todoItems = todoList.querySelectorAll('.todo-item');
+            todoItems.forEach((item, index) => {
+                item.setAttribute('aria-posinset', (index + 1).toString());
+                item.setAttribute('aria-setsize', todoItems.length.toString());
+            });
+        }
+    </script>
+</body>
+
+</html>

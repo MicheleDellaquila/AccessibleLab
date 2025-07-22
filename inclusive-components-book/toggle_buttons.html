@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.5;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .notification-section {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        .notification-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .notification-item:last-child {
+            border-bottom: none;
+        }
+
+        .notification-label {
+            font-size: 16px;
+            color: #333;
+        }
+
+        .switch-container {
+            position: relative;
+        }
+
+        .switch-button {
+            display: flex;
+            background: #ddd;
+            border: 2px solid #000;
+            border-radius: 4px;
+            padding: 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .switch-option {
+            padding: 8px 16px;
+            background: transparent;
+            color: #666;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .switch-button[aria-checked="true"] .switch-option:first-child {
+            background: #000;
+            color: #fff;
+        }
+
+        .switch-button[aria-checked="false"] .switch-option:last-child {
+            background: #000;
+            color: #fff;
+        }
+
+        .visually-hidden {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: 0;
+            border: 0;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            word-wrap: normal;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- EXAMPLE 1 -->
+    <section>
+        <input type="checkbox" id="notify" name="notify" value="on">
+        <label for="notify">notify by email</label>
+        <fieldset>
+            <legend>Notify by email</legend>
+            <input type="radio" id="notify-on" name="notify" value="on" checked>
+            <label for="notify-on">On</label>
+            <input type="radio" id="notify-off" name="notify" value="off" checked>
+            <label for="notify-off">off</label>
+        </fieldset>
+    </section>
+
+    <!-- EXAMPLE 2 -->
+    <section>
+        <button class="toggle-button-1" type="button" aria-pressed="false">Notify by email</button>
+    </section>
+
+    <!-- EXAMPLE 3 -->
+    <section>
+        <button class="toggle-button-2" type="button" aria-pressed="false" aria-label="Play">&#x25b6</button>
+        <button class="toggle-button-3" type="button" aria-pressed="false">
+            <span aria-hidden="true">&#x25b6</span>
+            <span class="visually-hidden">Play</span>
+        </button>
+    </section>
+
+    <!-- EXAMPLE 4 -->
+    <section class="notification-section">
+        <h2>Switch controls, with auxiliary labeling using aria-labelledby</h2>
+
+        <div class="notification-item">
+            <span id="notify-email" class="notification-label">Notify by email</span>
+            <button role="switch" aria-checked="false" aria-labelledby="notify-email" class="switch-button">
+                <span class="switch-option">on</span>
+                <span class="switch-option">off</span>
+            </button>
+        </div>
+
+        <div class="notification-item">
+            <span id="notify-sms" class="notification-label">Notify by SMS</span>
+            <button role="switch" aria-checked="false" aria-labelledby="notify-sms" class="switch-button">
+                <span class="switch-option">on</span>
+                <span class="switch-option">off</span>
+            </button>
+        </div>
+
+        <div class="notification-item">
+            <span id="notify-fax" class="notification-label">Notify by fax</span>
+            <button role="switch" aria-checked="false" aria-labelledby="notify-fax" class="switch-button">
+                <span class="switch-option">on</span>
+                <span class="switch-option">off</span>
+            </button>
+        </div>
+
+        <div class="notification-item">
+            <span id="notify-smoke" class="notification-label">Notify by smoke signal</span>
+            <button role="switch" aria-checked="false" aria-labelledby="notify-smoke" class="switch-button">
+                <span class="switch-option">on</span>
+                <span class="switch-option">off</span>
+            </button>
+        </div>
+    </section>
+
+</body>
+
+<script>
+    const button1 = document.querySelector('.toggle-button-1');
+    button1.addEventListener("click", () => {
+        const pressed = button1.getAttribute("aria-pressed") === "true";
+        button1.setAttribute("aria-pressed", !pressed);
+        button1.textContent = pressed ? "Notify by email" : "Do not notify by email";
+    })
+
+    const button2 = document.querySelector('.toggle-button-2');
+    button2.addEventListener("click", () => {
+        const label = button2.getAttribute("aria-label");
+        button2.setAttribute("aria-pressed", label === "Play" ? "true" : "false");
+        button2.setAttribute("aria-label", label === "Play" ? "Pause" : "Play");
+        button2.innerHTML = label === "Play" ? "&#x23f8;" : "&#x25b6;";
+    })
+
+    const button3 = document.querySelector('.toggle-button-3');
+    button3.addEventListener("click", () => {
+        const pressed = button3.getAttribute("aria-pressed") === "true";
+        button3.setAttribute("aria-pressed", !pressed);
+        button3.querySelector('span[aria-hidden="true"]').innerHTML = pressed ? "&#x25b6;" : "&#x23f8;";
+        button3.querySelector('.visually-hidden').innerHTML = pressed ? "Play" : "Pause";
+    })
+
+    const switches = document.querySelectorAll('[role="switch"]');
+
+    switches.forEach(switchButton => {
+        switchButton.addEventListener('click', () => {
+            const currentState = switchButton.getAttribute('aria-checked');
+            const newState = currentState === 'true' ? 'false' : 'true';
+            switchButton.setAttribute('aria-checked', newState);
+        });
+
+
+        switchButton.addEventListener('keydown', (e) => {
+            if (e.key === ' ' || e.key === 'Enter') {
+                e.preventDefault();
+                switchButton.click();
+            }
+        });
+    });
+</script>
+
+</html>
