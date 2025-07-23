@@ -502,8 +502,7 @@
   <!-- 
     TODO:
     - Inserire su git hub questo cartella e generare un readme
-    - Comprendere meglio il funzionamento di aria-labelledby(sempre che quando impostata, prenda e comunichi tutto il testo dei nested elementi)
-      - Inoltre, se abbiamo aria-labelledby non serve aria-live in quanto se cambio il testo, viene comunicato automaticamente
+    - Gestire il focus quando viene eliminata un'estensione o viene disattivata
   -->
 
   <main>
@@ -535,7 +534,6 @@
         </ul>
       </section>
 
-
       <footer role="contentinfo" class="attribution">
         Challenge by <a href="https://www.frontendmentor.io?ref=challenge">Frontend Mentor</a>.
         Coded by <a href="https://www.frontendmentor.io/profile/MicheleDellaquila">Michele Dellaquila</a>.
@@ -544,10 +542,10 @@
 
     <div class="announcer" role="status" aria-live="polite" class="sr-only"></div>
 
-    <!-- Non capisco perchè senza aria-describedby e aria-labelledby il contenuto viene comunicato 2 volte. -->
-    <div id="remove-modal" class="modal" role="dialog" aria-modal="true" aria-hidden="true">
+    <div id="remove-modal" class="modal" role="dialog" aria-modal="true" aria-hidden="true"
+      aria-labelledby="modal-title" aria-describedby="modal-description">
       <div class="modal-backdrop" aria-hidden="true"></div>
-      <div class="modal-content" tabindex="0">
+      <div class="modal-content" tabindex="-1">
         <header class="modal-header">
           <h2 id="modal-title">Confirm Removal</h2>
           <button class="modal-close" aria-label="Close dialog" onclick="closeRemoveModal()">
@@ -555,11 +553,13 @@
           </button>
         </header>
         <div class="modal-body">
-          <p id="modal-description">Are you sure you want to remove <strong id="extension-name-modal"></strong>? This action cannot be undone.</p>
+          <p id="modal-description">Are you sure you want to remove <strong id="extension-name-modal"></strong>? This
+            action cannot be undone.</p>
         </div>
         <footer class="modal-footer">
           <button class="modal-btn modal-btn-secondary" onclick="closeRemoveModal()">Cancel</button>
-          <button class="modal-btn modal-btn-danger" id="confirm-remove" onclick="confirmRemoveExtension()">Remove Extension</button>
+          <button class="modal-btn modal-btn-danger" id="confirm-remove" onclick="confirmRemoveExtension()">Remove
+            Extension</button>
         </footer>
       </div>
     </div>
