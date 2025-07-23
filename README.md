@@ -6,8 +6,6 @@ A repository dedicated to fostering learning and practical application of Web Co
 
 The primary objective of this project is to provide practical experience in website accessibility, encompassing the implementation of accessibility best practices and adherence to the Web Content Accessibility Guidelines (WCAG) standards.
 
-## 📁 Project Structure
-
 ## 🚀 Included Projects
 
 ### 1. Browser Extensions Manager UI
@@ -81,7 +79,7 @@ Fully accessible task list with:
 **Michele Dellaquila**
 
 - Frontend Mentor: [@MicheleDellaquila](https://www.frontendmentor.io/profile/MicheleDellaquila)
-- GitHub: [@yourusername](https://github.com/yourusername)
+- GitHub: [@MicheleDellaquila](https://github.com/MicheleDellaquila)
 
 ## 📜 License
 
