@@ -197,6 +197,10 @@
       flex-direction: column;
     }
 
+    [tabindex="-1"] {
+      outline: none;
+    }
+
     .extension-card:hover {
       transform: translateY(-4px);
       box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
@@ -501,7 +505,6 @@
 
   <!-- 
     TODO:
-    - Inserire su git hub questo cartella e generare un readme
     - Gestire il focus quando viene eliminata un'estensione o viene disattivata
   -->
 
@@ -519,7 +522,7 @@
 
       <section aria-labelledby="extensions-list">
         <header class="section-header" aria-label="Extensions list header">
-          <h1 id="extensions-list" class="section-title">Extensions List</h1>
+          <h1 id="extensions-list" class="section-title" tabindex="-1">Extensions List</h1>
           <div role="group" aria-label="Filter extensions" class="filter-buttons">
             <button aria-label="Filter all extensions" aria-pressed="true" class="filter-btn active"
               onclick="filterExtensions('all')">All</button>
@@ -540,7 +543,7 @@
       </footer>
     </div>
 
-    <div class="announcer" role="status" aria-live="polite" class="sr-only"></div>
+    <div class="announcer" role="status" aria-live="polite" aria-relevant="all" class="sr-only"></div>
 
     <div id="remove-modal" class="modal" role="dialog" aria-modal="true" aria-hidden="true"
       aria-labelledby="modal-title" aria-describedby="modal-description">
@@ -598,7 +601,6 @@
       updateThemeIcons(savedTheme);
     }
 
-
     let currentFilter = 'all';
     function filterExtensions(filter) {
       currentFilter = filter;
@@ -616,6 +618,17 @@
     function toggleExtension(index) {
       extensionsData[index].isActive = !extensionsData[index].isActive;
       renderExtensions();
+
+      const announcer = document.querySelector('.announcer');
+      announcer.textContent = `Extension ${extensionsData[index].name} is now ${extensionsData[index].isActive ? 'active' : 'inactive'}.`;
+      setTimeout(() => { announcer.textContent = ''; }, 0);
+      if (index + 2 < extensionsData.length) {
+        const el = document.querySelector(`.extension-card[aria-posinset="${index + 2}"]`);
+        el.focus();
+      } else {
+        const el = document.querySelector(`.extension-card[aria-posinset="${1}"]`);
+        el.focus();
+      }
     }
 
     let extensionsData = [];
@@ -644,6 +657,7 @@
         const originalIndex = extensionsData.findIndex(ext => ext === extension);
 
         const card = document.createElement('li');
+        card.setAttribute("tabindex", "-1");
         card.setAttribute("aria-label", `Extension: ${extension.name} ${currentFilter === "all" && extension.isActive ? "active" : "inactive"}`);
         card.setAttribute("aria-posinset", filteredIndex + 1);
         card.setAttribute("aria-setsize", filteredExtensions.length);
@@ -697,6 +711,9 @@
 
       if (previousFocusElement && previousFocusElement.isConnected) {
         previousFocusElement.focus();
+      } else {
+        const extensionTitle = document.getElementById('extensions-list');
+        extensionTitle.focus();
       }
 
       previousFocusElement = null;
@@ -706,11 +723,14 @@
       const confirmRemoveBtn = document.getElementById('confirm-remove');
       const index = confirmRemoveBtn.getAttribute('data-index');
 
-      if (index !== null) {
-        if (confirm(`Are you sure you want to remove ${extensionsData[index].name}?`)) {
-          extensionsData.splice(index, 1);
-          renderExtensions();
-        }
+      if (index !== null && !isNaN(index)) {
+        const extensionName = extensionsData[index].name;
+        extensionsData.splice(index, 1);
+        renderExtensions();
+
+        const announcer = document.querySelector('.announcer');
+        announcer.textContent = `Extension ${extensionName} has been removed successfully.`;
+        setTimeout(() => { announcer.textContent = ''; }, 100);
       }
 
       closeRemoveModal();
