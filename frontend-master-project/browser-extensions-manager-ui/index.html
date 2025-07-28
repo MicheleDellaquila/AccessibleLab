@@ -502,19 +502,14 @@
 </head>
 
 <body>
-
-  <!-- 
-    TODO:
-    - Gestire il focus quando viene eliminata un'estensione o viene disattivata
-  -->
-
   <main>
     <div class="container">
       <header role="banner" class="header">
         <div class="logo-section">
           <img src="./assets/images/logo.svg" alt="Extensions name with a icon" class="logo">
         </div>
-        <button aria-label="Switch to dark theme" id="theme-toggle" class="theme-toggle" onclick="toggleTheme()">
+        <button type="button" aria-label="Switch to dark theme" id="theme-toggle" class="theme-toggle"
+          onclick="toggleTheme()" onkeydown="disableEvent(event)">
           <img src="./assets/images/icon-sun.svg" alt="" class="theme-icon" id="sun-icon">
           <img src="./assets/images/icon-moon.svg" alt="" class="theme-icon" id="moon-icon">
         </button>
@@ -569,6 +564,12 @@
   </main>
 
   <script>
+    function disableEvent(event) {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+      }
+    }
+
     function toggleTheme() {
       const html = document.documentElement;
       const currentTheme = html.getAttribute('data-theme');
@@ -659,13 +660,12 @@
         const card = document.createElement('li');
         card.setAttribute("tabindex", "-1");
         card.setAttribute("aria-label", `Extension: ${extension.name} ${currentFilter === "all" && extension.isActive ? "active" : "inactive"}`);
-        card.setAttribute("aria-posinset", filteredIndex + 1);
-        card.setAttribute("aria-setsize", filteredExtensions.length);
         card.className = `extension-card ${extension.isActive ? 'active' : 'inactive'}`;
+        const switchLabel = extension.isActive ? `Disable ${extension.name}` : `Enable ${extension.name}`;
 
         card.innerHTML = `
           <div class="extension-header">
-            <img src="${extension.logo}" alt="${extension.name} logo" class="extension-logo">
+            <img src="${extension.logo}" aria-hidden="true" class="extension-logo">
             <div class="extension-info">
               <h3>${extension.name}</h3>
               <p>${extension.description}</p>
@@ -673,7 +673,7 @@
           </div>
           <div class="extension-actions">
             <button class="remove-btn" onclick="openRemoveModal(${originalIndex})">Remove</button>
-            <div role="switch" class="toggle-switch ${extension.isActive ? 'active' : ''}" onclick="toggleExtension(${originalIndex})" aria-label="Toggle ${extension.name} extension" aria-checked="${extension.isActive}" tabindex="0">
+            <div role="switch" class="toggle-switch ${extension.isActive ? 'active' : ''}" onclick="toggleExtension(${originalIndex})" aria-label="${switchLabel}" aria-checked="${extension.isActive}" tabindex="0">
               <span class="toggle-switch-inner"></span>
             </div>
           </div>
