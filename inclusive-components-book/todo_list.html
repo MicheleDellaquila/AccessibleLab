@@ -118,6 +118,10 @@
             cursor: not-allowed;
         }
 
+        [tabindex="-1"] {
+            outline: none;
+        }
+
         .sr-only {
             position: absolute;
             width: 1px;
@@ -132,25 +136,14 @@
 </head>
 
 <body>
-
-    <!-- TODO:
-      - Gestire focus quando un elemento viene aggiunto o rimosso dalla lista.
-      - Cercare se impostare l'attributo aria-setsize a -1 o meno.
-      - Aggiungere l'attributo aria-relevant negli appunti WAI-ARIA.
-      - Riportare gli errori commessi rispetto al libro nelle note.
-    */-->
-
     <main>
-        <h1 id="todo-title">Todo List</h1>
+        <h1 id="todo-title" tabindex="-1">Todo List</h1>
 
-        <ul id="todo-list" aria-labelledby="todo-title">
+        <ul id="todo-list" aria-label="Elenco delle task">
             <!-- Todo items will be added here -->
         </ul>
 
         <form id="todo-form" novalidate>
-            <!-- Errore #1: Non hai inserito il campo label 
-            <label for="todo-input" class="sr-only">Add a todo item</label>
-            -->
             <input type="text" id="todo-input" placeholder="Add a new task" required>
             <button type="submit">Add</button>
         </form>
@@ -234,8 +227,7 @@
             // LI Element
             const li = document.createElement('li');
             li.className = 'todo-item';
-            li.setAttribute("aria-posinset", todos.length.toString());
-            li.setAttribute("aria-setsize", "-1");
+            li.setAttribute("aria-label", `Task: ${text}`);
             li.dataset.todoId = todoItem.id;
 
             // Label Element per wrappare checkbox e span
@@ -296,6 +288,8 @@
                 if (index > -1) todos.splice(index, 1);
                 li.remove();
 
+                const todoTitle = document.getElementById('todo-title');
+                todoTitle.focus();
                 updateAriaPositions();
                 todoStatusUpdate('deleted', text, todos.length);
             });
