@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Navigation Menu</title>
+    <style>
+        nav {
+            background-color: #333;
+            padding: 0;
+        }
+
+        .nav-list {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+
+        .nav-item {
+            position: relative;
+        }
+
+        .nav-link {
+            display: block;
+            color: white;
+            padding: 1rem;
+            text-decoration: none;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .nav-link:hover,
+        .nav-link:focus {
+            background-color: #555;
+        }
+
+        .submenu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: #444;
+            min-width: 200px;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: none;
+            z-index: 1000;
+        }
+
+        .submenu[aria-expanded="true"] {
+            display: block;
+        }
+
+        .submenu .nav-link {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #555;
+        }
+
+        .submenu .nav-link:hover,
+        .submenu .nav-link:focus {
+            background-color: #666;
+        }
+
+        .menu-button::after {
+            content: " ▼";
+            font-size: 0.8em;
+        }
+
+        .menu-button[aria-expanded="true"]::after {
+            content: " ▲";
+        }
+
+        /* Basic open/close helper */
+        .menu {
+            display: none;
+        }
+
+        .menu.is-open {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .menu>* {
+            width: fit-content;
+        }
+
+        [role="menuitemradio"] [aria-checked="true"] {
+            background-color: #666;
+        }
+
+        #difficulty-status {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            border: 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Submenu -->
+    <!-- <nav>
+        <ul class="nav-list">
+            <li class="nav-item">
+                <a href="#home" class="nav-link">Home</a>
+            </li>
+            <li class="nav-item">
+                <a href="#about" class="nav-link">About</a>
+            </li>
+            <li class="nav-item">
+                <a tabindex="0" role="button" href="#services" class="nav-link menu-button" id="services-button"
+                    aria-expanded="false">
+                    Services
+                </a>
+                <ul class="submenu" id="services-submenu">
+                    <li><a href="#" class="nav-link">Web Design</a></li>
+                    <li><a href="#" class="nav-link">Development</a></li>
+                    <li><a href="#" class="nav-link">Consulting</a></li>
+                    <li><a href="#" class="nav-link">Support</a></li>
+                </ul>
+            </li>
+            <li class="nav-item">
+                <a href="#contact" class="nav-link">Contact</a>
+            </li>
+        </ul>
+    </nav>
+
+    <main style="padding: 2rem;">
+        <section style="height: 100vh;" id="home">
+            <h2>Home</h2>
+            <p>This is the home section.</p>
+        </section>
+
+        <section style="height: 100vh;" id="about">
+            <h2>About</h2>
+            <p>This is the about section.</p>
+        </section>
+
+        <section style="height: 100vh;" id="services">
+            <h2>Services</h2>
+            <p>This is the services section.</p>
+        </section>
+
+        <section style="height: 100vh;" id="contact">
+            <h2>Contact</h2>
+            <p>This is the contact section.</p>
+        </section>
+    </main> -->
+
+
+    <!-- Navigation Menu Button -->
+    <!-- <div id="hamburger-menu">
+        <button id="hamburger-button" aria-expanded="false" aria-controls="nav-list">Menu</button>
+        <ul role="menu" class="nav-list" hidden>
+            <li role="menuitem" class="nav-item">
+                <a href="#home" class="nav-link">Home</a>
+            </li>
+            <li role="menuitem" class="nav-item">
+                <a href="#about" class="nav-link">About</a>
+            </li>
+
+            <li role="menuitem" class="nav-item">
+                <a href="#contact" class="nav-link">Contact</a>
+            </li>
+        </ul>
+    </div> -->
+
+    <!-- Real true menus -->
+    <button aria-haspopup="true" aria-expanded="false" onclick="toggleMenu(event, true)" onkeydown="toggleMenu(event)">
+        Difficulty
+        <span aria-hidden="true">&#x25bc;</span>
+    </button>
+    <div role="menu" id="difficulty-menu" class="menu" tabindex="-1" onkeydown="handleMenuKeys(event)">
+        <button tabindex="-1" role="menuitemradio" aria-label="Easy" onclick="selectDifficulty('Easy')"
+            aria-checked="true">Easy</button>
+        <button tabindex="-1" role="menuitemradio" aria-label="Medium"
+            onclick="selectDifficulty('Medium')">Medium</button>
+        <button tabindex="-1" role="menuitemradio" aria-label="Hard" onclick="selectDifficulty('Hard')">Hard</button>
+    </div>
+
+    <div role="status" aria-live="polite" id="difficulty-status"></div>
+
+    <script>
+        // const menuButton = document.getElementById('services-button');
+        // const submenu = document.getElementById('services-submenu');
+        // const allNavLinks = document.querySelectorAll('.nav-link');
+
+        // menuButton.addEventListener('focus', function () {
+        //     submenu.style.display = 'block';
+        // });
+
+        // menuButton.addEventListener('click', function () {
+        //     const isExpanded = submenu.style.display === 'block';
+        //     submenu.style.display = isExpanded ? 'none' : 'block';
+        //     menuButton.setAttribute('aria-expanded', !isExpanded);
+        // });
+
+        // // Close submenu when focus moves to other nav links (like Contact)
+        // allNavLinks.forEach(link => {
+        //     if (link !== menuButton && !submenu.contains(link)) {
+        //         link.addEventListener('focus', function () {
+        //             submenu.style.display = 'none';
+        //         });
+        //     }
+        // });
+
+        // // Close submenu when clicking outside
+        // document.addEventListener('click', function (event) {
+        //     if (!menuButton.contains(event.target) && !submenu.contains(event.target)) {
+        //         submenu.style.display = 'none';
+        //         menuButton.setAttribute('aria-expanded', 'false');
+        //     }
+        // });
+
+        const button = document.querySelector('button[aria-haspopup="true"]');
+        const chevron = button.querySelector('[aria-hidden="true"]');
+        const menu = document.getElementById('difficulty-menu');
+        const menuItems = Array.from(menu.querySelectorAll('[role="menuitemradio"]'));
+        const notification = document.getElementById('difficulty-status');
+
+        const selectDifficulty = (level) => {
+            closeMenu();
+
+            menuItems.forEach(item => {
+                item.setAttribute('aria-checked', item.getAttribute('aria-label') === level);
+            });
+
+            notification.textContent = `Difficulty set to ${level}`;
+            setTimeout(() => notification.textContent = '', 2000);
+            button.focus();
+        };
+
+        const closeMenu = () => {
+            button.setAttribute('aria-expanded', 'false');
+            menu.classList.remove('is-open');
+            if (chevron) chevron.innerHTML = '&#x25bc;'; // Down arrow
+            button.focus();
+        }
+
+        const openMenu = (focusIndex = 0) => {
+            button.setAttribute('aria-expanded', 'true');
+            menu.classList.add('is-open');
+            if (chevron) chevron.innerHTML = '&#x25b2;'; // Up arrow
+            menuItems[focusIndex].focus();
+        }
+
+        const toggleMenu = (event, isClick = false) => {
+            const isExpanded = button.getAttribute('aria-expanded') === 'true';
+
+            if (event.code === "ArrowDown" || event.code === "Enter" || event.code === "Space") {
+                event.preventDefault();
+                isExpanded ? closeMenu() : openMenu();
+            } else if (event.code === "ArrowUp") {
+                event.preventDefault();
+                isExpanded ? closeMenu() : openMenu(menuItems.length - 1);
+            }
+        };
+
+        const handleMenuKeys = (event) => {
+            if (event.code === "Escape") {
+                closeMenu();
+                return;
+            }
+
+            if (event.code !== "ArrowDown" && event.code !== "ArrowUp") {
+                return;
+            }
+
+            event.preventDefault();
+            const currentItem = document.activeElement;
+            const currentIndex = menuItems.indexOf(currentItem);
+            let nextIndex;
+
+            if (event.code === "ArrowDown") {
+                nextIndex = (currentIndex + 1) % menuItems.length;
+            } else if (event.code === "ArrowUp") {
+                nextIndex = (currentIndex - 1 + menuItems.length) % menuItems.length;
+            }
+
+            menuItems[nextIndex].focus();
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prefers Contrast Media Query Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            line-height: 1.6;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .status {
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            font-weight: bold;
+            background-color: #e3f2fd;
+            color: #1976d2;
+            border: 1px solid #bbdefb;
+        }
+
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .button {
+            background-color: #2196f3;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        .link {
+            color: #1976d2;
+            text-decoration: underline;
+        }
+
+        /* Normal contrast (default) */
+        @media (prefers-contrast: no-preference) {
+            .status::before {
+                content: "Normal Contrast Detected - ";
+            }
+        }
+
+        /* High contrast */
+        @media (prefers-contrast: more) {
+            body {
+                background-color: #000;
+                color: #fff;
+            }
+
+            .container {
+                background: #000;
+                border: 2px solid #fff;
+                box-shadow: none;
+            }
+
+            .status {
+                background-color: #000;
+                color: #fff;
+                border: 2px solid #fff;
+            }
+
+            .status::before {
+                content: "High Contrast Detected - ";
+            }
+
+            .test-section {
+                border: 2px solid #fff;
+                background-color: #000;
+            }
+
+            .button {
+                background-color: #fff;
+                color: #000;
+                border: 2px solid #fff;
+            }
+
+            .link {
+                color: #fff;
+                font-weight: bold;
+            }
+        }
+
+        /* Low contrast */
+        @media (prefers-contrast: less) {
+            body {
+                background-color: #f9f9f9;
+                color: #666;
+            }
+
+            .container {
+                background: #fafafa;
+                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+                border: 1px solid #eee;
+            }
+
+            .status {
+                background-color: #f0f0f0;
+                color: #777;
+                border: 1px solid #ddd;
+            }
+
+            .status::before {
+                content: "Low Contrast Detected - ";
+            }
+
+            .test-section {
+                border: 1px solid #eee;
+                background-color: #fafafa;
+            }
+
+            .button {
+                background-color: #ccc;
+                color: #666;
+                border: 1px solid #bbb;
+            }
+
+            .link {
+                color: #888;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Prefers Contrast Media Query Test</h1>
+
+        <div class="status">
+            This page will automatically adjust based on your system's contrast preference.
+        </div>
+
+        <div class="test-section">
+            <h2>Test Elements</h2>
+            <p>This paragraph contains regular text to test readability.</p>
+            <p>Here's a <span class="link">link example</span> to see how links appear.</p>
+            <button class="button">Sample Button</button>
+        </div>
+
+        <div class="test-section">
+            <h2>How to Test</h2>
+            <ul>
+                <li><strong>Windows:</strong> Settings → Ease of Access → High contrast</li>
+                <li><strong>macOS:</strong> System Preferences → Accessibility → Display → Increase contrast</li>
+                <li><strong>Browser DevTools:</strong> Rendering tab → Emulate CSS media feature prefers-contrast</li>
+            </ul>
+        </div>
+
+        <div class="test-section">
+            <h2>Expected Behavior</h2>
+            <ul>
+                <li><strong>Normal:</strong> Standard colors and contrast</li>
+                <li><strong>High Contrast:</strong> Black background, white text, strong borders</li>
+                <li><strong>Low Contrast:</strong> Muted colors, softer appearance</li>
+            </ul>
+        </div>
+    </div>
+</body>
+
+</html>

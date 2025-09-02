@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Example</title>
+
+    <style>
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            border: 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Video Example</h1>
+    
+    <video width="640" height="360" controls>
+        <source src="videoplayback.mp4" type="video/mp4">\
+        <track kind="subtitles" srclang="en" label="Inglese" src="videoplayback.vtt" default>
+    </video>
+    <!-- <div tabindex="0" class="sr-only">
+        <p>Amici e amiche di And Channel, bentornati al salottino di domenica 31 agosto 2025. Oggi parliamo di un tema fuori dal
+        tempo e dallo spazio: vi voglio dare la mia prima impressione, quasi una recensione, di **Broken Arrow**, titolo che ho
+        giocato nelle ultime settimane in modo molto più approfondito rispetto al lancio. Il gioco è stato in beta per due anni;
+        ho avuto modo di accedere a delle build durante la fase di sviluppo, grazie al publisher Slitherin. Quando il gioco è
+        uscito, è stato molto più strutturato: ci sono luci e ombre, e secondo me la valutazione su Steam non riflette il
+        potenziale e la bellezza di questo titolo.
+        </p>
+    </div> -->
+</body>
+</html>
