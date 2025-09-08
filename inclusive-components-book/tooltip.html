@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tooltip Example</title>
+    <style>
+        .notifications {
+            border: none;
+            border-radius: 4px;
+            padding: 8px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .notifications svg {
+            width: 24px;
+            height: 24px;
+            fill: black;
+        }
+
+        [role="tooltip"] {
+            position: absolute;
+            background: #333;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            white-space: nowrap;
+            top: -35px;
+            left: 50%;
+            transform: translateX(-50%);
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .notifications:hover+[role="tooltip"],
+        .notifications:focus+[role="tooltip"] {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .notifications-count {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: red;
+            color: white;
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            border: 0;
+        }
+
+        /* Toggletip styles */
+        .toggletip-container {
+            margin: 20px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .toggletip-button {
+            background: #007cba;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .toggletip-content {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: black;
+            color: white;
+            padding: 12px;
+            border-radius: 4px;
+            margin-top: 8px;
+            min-width: 200px;
+            z-index: 1000;
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .toggletip-close {
+            float: right;
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+            margin-left: 8px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Add SVG definitions -->
+    <svg style="display: none;">
+        <symbol id="notifications-icon" viewBox="0 0 24 24">
+            <path
+                d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z" />
+        </symbol>
+    </svg>
+
+    <div style="position: relative;margin: 50px; text-align: center;">
+        <button class="notifications" aria-describedby="notifications-description">
+            <svg>
+                <use xlink:href="#notifications-icon"></use>
+            </svg>
+            <span class="notifications-count">3</span>
+            <span class="sr-only">Notifications</span>
+        </button>
+        <div role="tooltip" id="notifications-description">Gestisci le notifiche</div>
+    </div>
+
+    <div style="margin: 50px; text-align: center;">
+        <h2>Toggletip Example</h2>
+        <div class="toggletip-container">
+            <button id="toggletip-button" class="toggletip-button" aria-label="More information" aria-expanded="false"
+                aria-controls="toggletip-content">
+                Help
+            </button>
+            <div id="toggletip-content" class="toggletip-content" role="tooltip" tabindex="-1" style="display: none;">
+                This is additional information that can be toggled on and off.
+                <button id="toggletip-close" class="toggletip-close" aria-label="Close toggletip">
+                    ×
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Toggletip functionality
+        const toggletipButton = document.getElementById('toggletip-button');
+        const toggletipContent = document.getElementById('toggletip-content');
+        const toggletipClose = document.getElementById('toggletip-close');
+
+        function showToggletip() {
+            toggletipContent.style.display = 'block';
+            toggletipButton.setAttribute('aria-expanded', 'true');
+            toggletipContent.focus();
+        }
+
+        function hideToggletip() {
+            toggletipContent.style.display = 'none';
+            toggletipButton.setAttribute('aria-expanded', 'false');
+            toggletipButton.focus();
+        }
+
+        toggletipButton.addEventListener('click', function () {
+            const isVisible = toggletipContent.style.display === 'block';
+            if (isVisible) {
+                hideToggletip();
+            } else {
+                showToggletip();
+            }
+        });
+
+        toggletipClose.addEventListener('click', hideToggletip);
+
+        // Close on escape key
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && toggletipContent.style.display === 'block') {
+                hideToggletip();
+            }
+        });
+    </script>
+</body>
+
+</html>
