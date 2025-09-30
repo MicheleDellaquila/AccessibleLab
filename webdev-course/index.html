@@ -144,37 +144,37 @@
 </head>
 
 <body>
-    <div class="container">
-        <h1>Prefers Contrast Media Query Test</h1>
+    <div class="test-section">
+        <h2>Iframe Example</h2>
+        <iframe src="https://example.com" aria-label="Example website showing iframe functionality" scrolling="auto"
+            width="100%" height="300" style="border: 1px solid #ddd; border-radius: 4px;">
+            <p>Your browser does not support iframes. <a href="https://example.com">Visit the page directly</a>.</p>
+        </iframe>
+    </div>
 
-        <div class="status">
-            This page will automatically adjust based on your system's contrast preference.
-        </div>
+    <div class="test-section">
+        <h2>SVG Example</h2>
+        <svg role="img" width="300" height="200" viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg">
+            <title id="svg-title">Colorful Geometric Shapes</title>
+            <desc id="svg-desc">A collection of geometric shapes including a blue circle, green rectangle, and red
+                triangle
+            </desc>
 
-        <div class="test-section">
-            <h2>Test Elements</h2>
-            <p>This paragraph contains regular text to test readability.</p>
-            <p>Here's a <span class="link">link example</span> to see how links appear.</p>
-            <button class="button">Sample Button</button>
-        </div>
+            <!-- Circle -->
+            <circle cx="75" cy="75" r="40" fill="#2196f3" stroke="#1976d2" stroke-width="2" />
 
-        <div class="test-section">
-            <h2>How to Test</h2>
-            <ul>
-                <li><strong>Windows:</strong> Settings → Ease of Access → High contrast</li>
-                <li><strong>macOS:</strong> System Preferences → Accessibility → Display → Increase contrast</li>
-                <li><strong>Browser DevTools:</strong> Rendering tab → Emulate CSS media feature prefers-contrast</li>
-            </ul>
-        </div>
+            <!-- Rectangle -->
+            <rect x="130" y="35" width="80" height="80" fill="#4caf50" stroke="#388e3c" stroke-width="2" rx="5" />
 
-        <div class="test-section">
-            <h2>Expected Behavior</h2>
-            <ul>
-                <li><strong>Normal:</strong> Standard colors and contrast</li>
-                <li><strong>High Contrast:</strong> Black background, white text, strong borders</li>
-                <li><strong>Low Contrast:</strong> Muted colors, softer appearance</li>
-            </ul>
-        </div>
+            <!-- Triangle -->
+            <polygon points="75,150 50,190 100,190" fill="#f44336" stroke="#d32f2f" stroke-width="2" />
+
+            <!-- Text -->
+            <text x="150" y="170" font-family="Arial, sans-serif" font-size="14" fill="currentColor"
+                text-anchor="middle">
+                SVG Graphics
+            </text>
+        </svg>
     </div>
 </body>
 

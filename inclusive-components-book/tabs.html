@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Tab Panels</title>
+    <style>
+        .tab-container {
+            max-width: 600px;
+            margin: 20px auto;
+            font-family: Arial, sans-serif;
+        }
+
+        .tab-list {
+            display: flex;
+            border-bottom: 2px solid #ccc;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .tab {
+            background: #f0f0f0;
+            border: 1px solid #ccc;
+            border-bottom: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            margin-right: 2px;
+        }
+
+        .tab.active {
+            background: white;
+            border-bottom: 2px solid white;
+            margin-bottom: -2px;
+        }
+
+        .tab-panel:not(:target) {
+            display: none;
+        }
+
+        .tab-panel {
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-top: none;
+            background: white;
+        }
+
+        .tab-panel.active {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="tab-container">
+        <ul role="tablist" class="tab-list">
+            <li role="presentation"><a onkeydown="handleTabKey(event)" role="tab" class="tab active" href="#tab1"
+                    data-tab="tab1" aria-controls="tab1">Tab 1</a></li>
+            <li role="presentation"><a onkeydown="handleTabKey(event)" class="tab" href="#tab2" tabindex="-1"
+                    data-tab="tab2" aria-controls="tab2">Tab 2</a></li>
+            <li role="presentation"><a onkeydown="handleTabKey(event)" class="tab" href="#tab3" tabindex="-1"
+                    data-tab="tab3" aria-controls="tab3">Tab 3</a></li>
+        </ul>
+
+        <section role="tabpanel" tabindex="0" id="tab1" class="tab-panel active">
+            <h3>Panel 1</h3>
+            <p>This is the content for the first tab panel.</p>
+        </section>
+
+        <section role="tabpanel" tabindex="-1" id="tab2" class="tab-panel" aria-hidden="true">
+            <h3>Panel 2</h3>
+            <p>This is the content for the second tab panel.</p>
+        </section>
+
+        <section role="tabpanel" tabindex="-1" id="tab3" class="tab-panel" aria-hidden="true">
+            <h3>Panel 3</h3>
+            <p>This is the content for the third tab panel.</p>
+        </section>
+    </div>
+
+    <script>
+        const tabsLinks = document.querySelectorAll('.tab');
+
+        document.addEventListener("DOMContentLoaded", () => {
+            document.querySelectorAll('.tab-panel').forEach(panel => {
+                if (!panel.classList.contains('active')) {
+                    panel.setAttribute('tabindex', '-1');
+                    panel.setAttribute('aria-hidden', 'true');
+                }
+            });
+
+            tabsLinks.forEach(tab => {
+                tab.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    // Remove active class from all tabs and panels
+                    tabsLinks.forEach(t => t.classList.remove('active'));
+                    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+                    tabsLinks.forEach(t => t.setAttribute('tabindex', '-1'));
+
+                    // Add active class to clicked tab
+                    tab.classList.add('active');
+                    tab.removeAttribute('tabindex');
+
+                    // Show corresponding panel
+                    const targetPanel = document.getElementById(tab.dataset.tab);
+                    targetPanel.classList.add('active');
+                    targetPanel.setAttribute('tabindex', '0');
+                    targetPanel.setAttribute('aria-hidden', 'false');
+                    targetPanel.focus();
+                });
+            });
+
+        });
+
+        function handleTabKey(event) {
+            const key = event.key;
+
+            if (key === "ArrowLeft") {
+                event.preventDefault();
+                event.target.parentElement.previousElementSibling?.querySelector('.tab').focus();
+                return;
+            } else {
+                if (key === "ArrowRight") {
+                    event.preventDefault();
+                    event.target.parentElement.nextElementSibling?.querySelector('.tab').focus();
+                    return;
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>

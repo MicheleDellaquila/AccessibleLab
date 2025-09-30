@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About | Michele Dellaquila</title>
+
+    <style>
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            border: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <h1 id="about-title" tabindex="-1">About me</h1>
+    <p>My name is Michele Dellaquila, and I am passionate about web accessibility.</p>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const aboutTitle = document.getElementById('about-title');
+            aboutTitle.focus();
+        });
+    </script>
+</body>
+
+</html>
