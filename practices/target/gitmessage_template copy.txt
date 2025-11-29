@@ -1,0 +1,9 @@
+[ticket]: [Summarize WHAT the commit does, not HOW it does it]
+
+[Explain the WHY]
+
+--------------------------------------------------------------
+
+[d342da]: Fix login bug when user is inactive
+
+Add endpoint to enable users to download purchase history

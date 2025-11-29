@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+
+  <body>
+    <form id="form">
+      <input id="number1" name="number1" type="number" value="1" />
+      <input id="number2" name="number2" type="number" value="4" />
+      <button type="submit">Calcola risultato</button>
+    </form>
+    <output
+      id="result"
+      name="output"
+      for="number1 number2"
+      form="form"
+    ></output>
+
+    <iframe
+      src="/practices/data-*/exercise1.html"
+      width="500"
+      height="500"
+    ></iframe>
+
+    <script>
+      const form = document.getElementById("form");
+      const input1 = document.getElementById("number1");
+      const input2 = document.getElementById("number2");
+      const output = document.getElementById("result");
+
+      form.addEventListener("submit", (event) => {
+        event.preventDefault();
+
+        console.log(form.elements);
+
+        const result = Number(input1.value) + Number(input2.value);
+        output.textContent = result.toString();
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .container {
+        position: relative;
+      }
+
+      p:hover + .tooltip {
+        display: block;
+      }
+
+      .tooltip {
+        display: none;
+        position: absolute;
+        background-color: black;
+        width: 120px;
+        height: 40px;
+      }
+
+      .tooltip::before {
+        content: attr(data-tooltip-text);
+        position: absolute;
+        top: 0;
+        left: 0;
+        color: white;
+      }
+
+      .tooltip[data-tooltip-position="top"] {
+        top: 0;
+      }
+
+      .tooltip[data-tooltip-position="bottom"] {
+        bottom: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <p>info</p>
+      <div
+        class="tooltip"
+        data-tooltip-text="Sono un tooltip"
+        data-tooltip-position="top"
+      ></div>
+    </div>
+  </body>
+</html>

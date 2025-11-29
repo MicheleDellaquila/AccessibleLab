@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      article {
+        border: 1px solid red;
+      }
+
+      article::before {
+        content: attr(data-parent);
+      }
+
+      article[data-columns="3"] {
+        width: 300px;
+      }
+
+      article[data-columns="4"] {
+        width: 400px;
+      }
+    </style>
+  </head>
+  <body>
+    <a href="./exercise2.html" target="_parent">exercise2.html</a>
+
+    <article data-columns="3" data-parent="-">article 1</article>
+    <article data-columns="4" data-parent="-">article 2</article>
+    <article data-columns="3" data-parent="-">article 3</article>
+    <article data-columns="4" data-parent="-">article 4</article>
+    <article data-columns="3" data-parent="-">article 5</article>
+  </body>
+</html>

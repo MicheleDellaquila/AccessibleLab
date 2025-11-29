@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      div {
+        position: relative;
+      }
+
+      blockquote::before {
+        content: "";
+        position: absolute;
+        height: 100%;
+        border: 2px solid black;
+        margin-left: -12px;
+      }
+    </style>
+  </head>
+  <body>
+    <article>
+      <h2>Springs and Bounces in Native CSS</h1>
+      <p>
+        When creating animations, we can decide how to transition between states
+        using a <span>timing function</span>. Historically, we’ve used Bézier
+        curves for this, which provide us with a range of different options:
+      </p>
+      <h1>The linear() function</h2>
+      <p>
+        The core idea here is surprisingly simple: instead of using
+        mathematically-derived Bézier curves, we can instead draw the easing
+        curve we want, by specifying a set of individual points on a cartesian
+        plane.
+      </p>
+      <div>
+        <blockquote>
+          Quando sono diventato amico di me stesso
+          <cite>Lucio Anneo Seneca</cite>
+        </blockquote>
+      </div>
+    </article>
+  </body>
+</html>
